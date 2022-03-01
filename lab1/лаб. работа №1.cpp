@@ -376,5 +376,5 @@ int main() {
     cout << endl << "Эквивалентное замыкание: " << endl;
     equivalent_closure(m);
 
-    return 0;
+    return 0; 
 }
