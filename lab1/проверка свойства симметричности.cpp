@@ -21,7 +21,7 @@ int main(){
 
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {
-            if (i != j && m[i][j] != m[j][i] && m[i][j] != 1) {
+            if (i != j && m[i][j] != m[j][i]) {
                 q = false;
             }
         }

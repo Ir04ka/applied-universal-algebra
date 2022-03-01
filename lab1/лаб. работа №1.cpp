@@ -37,7 +37,7 @@ bool symmetry(vector<vector<int>>& m) {
 
     for (int i = 0; i < size(m); ++i) {
         for (int j = 0; j < size(m); ++j) {
-            if (i != j && m[i][j] != m[j][i] && m[i][j] != 1) {
+            if (i != j && m[i][j] != m[j][i]) {
                 q = false;
             }
         }
