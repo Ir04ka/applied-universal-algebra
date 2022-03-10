@@ -4,6 +4,43 @@
 
 using namespace std;
 
+bool transitivity(vector<vector<int>>& m) {
+
+    vector<vector<int>> w(size(m), vector<int> (size(m)));
+
+    for (int i = 0; i < size(m); ++i) {
+        for (int j = 0; j < size(m); ++j) {
+            w[i][j] = 0;
+        }
+    }
+
+    for (int i = 0; i < size(m); ++i) {
+        for (int l = 0; l < size(m); ++l) {
+            int s = 0;
+            for (int j = 0; j < size(m); ++j) {
+                s += m[i][j] * m[j][l];
+            }
+            w[i][l] += s;
+            if (w[i][l] > 1) {
+                w[i][l] = 1;
+            }
+        }
+    }
+
+    bool q = true;
+
+    for (int i = 0; i < size(m); ++i) {
+        for (int j = 0; j < size(m); ++j) {
+            if (w[i][j] > m[i][j]) {
+                q = false;
+            }
+        }
+    }
+
+    return q;
+
+}
+
 int main(){
 
     SetConsoleOutputCP(CP_UTF8);
@@ -49,10 +86,36 @@ int main(){
         }
     }
 
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < n; ++j) {
-            if (m[i][j] == 0 && w[i][j] == 1) {
-                a.push_back({i + 1, j + 1});
+    vector<vector<int>> copy_m(size(m), vector<int> (size(m)));
+
+    for (int i = 0; i < size(m); ++i) {
+        for (int j = 0; j < size(m); ++j) {
+            copy_m[i][j] = m[i][j];
+        }
+
+    }
+
+    while (!transitivity(m)) {
+        for (int i = 0; i < size(m); ++i) {
+            for (int j = 0; j < size(m); ++j) {
+                if (m[i][j] == 0 && w[i][j] == 1) {
+                    a.push_back({i + 1, j + 1});
+                    m[i][j] = 1;
+                }
+            }
+        }
+        if (!transitivity(m)) {
+            for (int i = 0; i < size(m); ++i) {
+                for (int l = 0; l < size(m); ++l) {
+                    int s = 0;
+                    for (int j = 0; j < size(m); ++j) {
+                        s += m[i][j] * copy_m[j][l];
+                    }
+                    w[i][l] += s;
+                    if (w[i][l] > 1) {
+                        w[i][l] = 1;
+                    }
+                }
             }
         }
     }
