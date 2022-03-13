@@ -217,21 +217,21 @@ void transitive_closure(vector<vector<int>>& m) {
 
     }
 
-    while (!transitivity(m)) {
+    while (!transitivity(copy_m)) {
         for (int i = 0; i < size(m); ++i) {
             for (int j = 0; j < size(m); ++j) {
-                if (m[i][j] == 0 && w[i][j] == 1) {
+                if (copy_m[i][j] == 0 && w[i][j] == 1) {
                     a.push_back({i + 1, j + 1});
-                    m[i][j] = 1;
+                    copy_m[i][j] = 1;
                 }
             }
         }
-        if (!transitivity(m)) {
+        if (!transitivity(copy_m)) {
             for (int i = 0; i < size(m); ++i) {
                 for (int l = 0; l < size(m); ++l) {
                     int s = 0;
                     for (int j = 0; j < size(m); ++j) {
-                        s += m[i][j] * copy_m[j][l];
+                        s += copy_m[i][j] * m[j][l];
                     }
                     w[i][l] += s;
                     if (w[i][l] > 1) {
@@ -262,6 +262,12 @@ void equivalent_closure(vector<vector<int>>& m) {
         }
     }
 
+    for (int i = 0; i < size(m); ++i) {
+        if (m[i][i] == 0) {
+            a.push_back({i + 1, i + 1});
+        }
+    }
+
     int q = size(a);
 
     for (int i = 0; i < q; ++i) {
@@ -289,10 +295,36 @@ void equivalent_closure(vector<vector<int>>& m) {
         }
     }
 
+    vector<vector<int>> copy_m(size(m), vector<int> (size(m)));
+
     for (int i = 0; i < size(m); ++i) {
         for (int j = 0; j < size(m); ++j) {
-            if (m[i][j] == 0 && w[i][j] == 1) {
-                a.push_back({i + 1, j + 1});
+            copy_m[i][j] = m[i][j];
+        }
+
+    }
+
+    while (!transitivity(copy_m)) {
+        for (int i = 0; i < size(m); ++i) {
+            for (int j = 0; j < size(m); ++j) {
+                if (copy_m[i][j] == 0 && w[i][j] == 1) {
+                    a.push_back({i + 1, j + 1});
+                    copy_m[i][j] = 1;
+                }
+            }
+        }
+        if (!transitivity(copy_m)) {
+            for (int i = 0; i < size(m); ++i) {
+                for (int l = 0; l < size(m); ++l) {
+                    int s = 0;
+                    for (int j = 0; j < size(m); ++j) {
+                        s += copy_m[i][j] * m[j][l];
+                    }
+                    w[i][l] += s;
+                    if (w[i][l] > 1) {
+                        w[i][l] = 1;
+                    }
+                }
             }
         }
     }
@@ -387,7 +419,7 @@ int main() {
         cout << "отношение не является отношением доминирования" << endl;
     }
 
-    cout << endl << "Исходное замыкание: " << endl;
+    cout << endl << "Исходное отношение: " << endl;
     original_closure(m);
 
     cout << endl << "Рефлексивное замыкание: " << endl;
