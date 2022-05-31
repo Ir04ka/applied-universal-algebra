@@ -32,12 +32,12 @@ int main() {
     cin >> n;
 
     cout << "Введите матрицу:" << endl;
-    vector<vector<int>> m(n, vector<int>(n));
+    vector<vector<int>> matrix(n, vector<int>(n));
     vector<set<int>> a(n);
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {
-            cin >> m[i][j];
-            if (m[i][j]) {
+            cin >> matrix[i][j];
+            if (matrix[i][j]) {
                 a[j].insert(i);
             }
         }
